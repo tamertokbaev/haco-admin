@@ -1,0 +1,19 @@
+* {
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+  text-rendering: optimizeSpeed;
+
+  &:focus, &:focus-visible, &:focus-within, &:target, &:active{
+    outline: none;
+  }
+}
+
+body {
+  min-height: 100vh;
+  height: 100%;
+  font-family: 'SF Pro Display', sans-serif;
+}
+
+.p-datepicker {
+  min-width: 300px !important;
+}

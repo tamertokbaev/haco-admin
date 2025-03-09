@@ -1,0 +1,37 @@
+.sidebar {
+  width: 250px;
+  background-color: #2c3e50;
+  color: #ecf0f1;
+  min-height: 100vh;
+  padding: 20px;
+
+  .menuList {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    .menuItem {
+      margin-bottom: 10px;
+      font-size: 18px;
+      font-weight: 600;
+
+      .menuLink {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        color: inherit;
+        padding: 10px;
+        border-radius: 4px;
+        transition: background-color 0.3s ease;
+
+        &:hover {
+          background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .menuIcon {
+          margin-right: 10px;
+        }
+      }
+    }
+  }
+}

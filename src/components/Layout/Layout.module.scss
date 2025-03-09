@@ -1,0 +1,14 @@
+.root {
+  display: flex;
+
+  .pageRoot {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+
+    .content {
+      padding: 20px;
+      flex-grow: 1;
+    }
+  }
+}
