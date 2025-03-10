@@ -2,32 +2,50 @@ import {useRef, useState} from "react"
 import {Button} from "primereact/button"
 import {confirmPopup, ConfirmPopup} from "primereact/confirmpopup"
 import Table, {TableRef, TableRow} from "../../components/Table/Table"
-import {Story} from "../../interfaces/interfaces"
+import {Hashtag} from "../../interfaces/interfaces"
 import {BackendService} from "../../http/service"
 import {Toast} from "../../utils/toast"
 import Layout from "../../components/Layout/Layout"
 import {AppRoutePageNames, AppRoutes} from "../../routes"
-import StoriesAddUpdateModal from "../../views/stories/StoriesAddUpdateModal"
+import HashTagAddUpdateModal from "../../views/hashtags/HashtagAddUpdateModal"
+import HashTagPostAttachModal from "../../views/hashtags/HashtagPostAttachModal"
 
-const StoriesListPage = () => {
+const HastagsListPage = () => {
   const tableRef = useRef<TableRef>(null)
-  const [storyEditState, setStoryEditState] = useState<{isOpen: boolean; story: Story | null}>({
+  const [hashtagEditState, setHashtagEditState] = useState<{isOpen: boolean; hashtag: Hashtag | null}>({
     isOpen: false,
-    story: null,
+    hashtag: null,
+  })
+  const [hashtagPostAttachState, setHashtagPostAttachState] = useState<{isOpen: boolean; hashtag: Hashtag | null}>({
+    isOpen: false,
+    hashtag: null,
   })
 
   const closeModal = () => {
-    setStoryEditState((prevState) => ({...prevState, isOpen: false}))
+    setHashtagEditState((prevState) => ({...prevState, isOpen: false}))
   }
 
-  const rows: Array<TableRow<Story>> = [
-    {heading: "ID", content: (item) => item.stories_id},
-    {heading: "Название", content: (item) => item.title},
+  const closeHashtagPostAttachModal = () => {
+    setHashtagPostAttachState((prevState) => ({...prevState, isOpen: false}))
+  }
+
+  const rows: Array<TableRow<Hashtag>> = [
+    {heading: "ID", content: (item) => item.hashtag_id},
+    {heading: "Название", content: (item) => item.name},
+    {heading: "Посты", content: (item) => item.posts?.map((item) => item.title).join(", ") || "-"},
     {
       heading: "",
       content: (item) => (
-        <Button size="small" onClick={() => setStoryEditState({isOpen: true, story: item})}>
+        <Button size="small" onClick={() => setHashtagEditState({isOpen: true, hashtag: item})}>
           Редактировать
+        </Button>
+      ),
+    },
+    {
+      heading: "",
+      content: (item) => (
+        <Button size="small" severity="info" onClick={() => setHashtagPostAttachState({isOpen: true, hashtag: item})}>
+          Привязать посты
         </Button>
       ),
     },
@@ -55,8 +73,8 @@ const StoriesListPage = () => {
     })
   }
 
-  const deleteItem = (product: Story) => {
-    BackendService.deleteStory(product.stories_id)
+  const deleteItem = (product: Hashtag) => {
+    BackendService.deleteHashtag(product.hashtag_id)
       .then((res) => {
         if (res.data.status) {
           Toast.displaySuccessMessage("Запись успешно удалена!")
@@ -78,22 +96,28 @@ const StoriesListPage = () => {
   }
 
   return (
-    <Layout pageTitle={AppRoutePageNames[AppRoutes.stories]}>
+    <Layout pageTitle={AppRoutePageNames[AppRoutes.hashtags]}>
       <ConfirmPopup />
       <div style={{marginBottom: "1rem", display: "flex", justifyContent: "flex-end"}}>
-        <Button size="small" icon="pi pi-plus" onClick={() => setStoryEditState({isOpen: true, story: null})}>
+        <Button size="small" icon="pi pi-plus" onClick={() => setHashtagEditState({isOpen: true, hashtag: null})}>
           Добавить новую запись
         </Button>
       </div>
-      <Table ref={tableRef} rows={rows} fetchUrl={BackendService.getStoriesList} />
-      <StoriesAddUpdateModal
-        isOpen={storyEditState.isOpen}
+      <Table ref={tableRef} rows={rows} fetchUrl={BackendService.getHashtagsList} />
+      <HashTagAddUpdateModal
+        isOpen={hashtagEditState.isOpen}
         handleClose={closeModal}
-        story={storyEditState.story}
+        hashtag={hashtagEditState.hashtag}
+        onSuccessModify={onSuccessModify}
+      />
+      <HashTagPostAttachModal
+        isOpen={hashtagPostAttachState.isOpen}
+        handleClose={closeHashtagPostAttachModal}
+        hashtag={hashtagPostAttachState.hashtag}
         onSuccessModify={onSuccessModify}
       />
     </Layout>
   )
 }
 
-export default StoriesListPage
+export default HastagsListPage

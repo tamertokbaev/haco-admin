@@ -5,8 +5,10 @@
     display: flex;
     flex-direction: column;
     flex-grow: 1;
+    margin-left: 250px;
 
     .content {
+      margin-top: 54px;
       padding: 20px;
       flex-grow: 1;
     }

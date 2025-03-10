@@ -1,6 +1,6 @@
 import React, {FC, useEffect, useState} from "react"
 import Modal from "../../components/Modal/Modal"
-import {Story, StoryCreate} from "../../interfaces/interfaces"
+import {Hashtag, HashtagCreate} from "../../interfaces/interfaces"
 import {useForm} from "react-hook-form"
 import FormGroup from "../../components/FormGroup/FormGroup"
 import TextField from "../../components/TextField/TextField"
@@ -9,41 +9,45 @@ import FileInput from "../../components/FileInput/FileInput"
 import {FileUploadHandlerEvent} from "primereact/fileupload"
 import {convertFileIntoBase64} from "../../utils/file"
 import {yupResolver} from "@hookform/resolvers/yup"
-import {StoryValidationSchema} from "../../validation/storyValidation"
+import {HashtagValidationSchema} from "../../validation/storyValidation"
 import {BackendService} from "../../http/service"
 import {Toast} from "../../utils/toast"
+import Checkbox from "../../components/Checkbox/Checkbox"
 
 type Props = {
   isOpen: boolean
   handleClose: () => void
-  story: Story | null
+  hashtag: Hashtag | null
   onSuccessModify: () => void
 }
 
-const StoryAddUpdateModal: FC<Props> = ({isOpen, handleClose, story, onSuccessModify}) => {
+const HashTagAddUpdateModal: FC<Props> = ({isOpen, handleClose, hashtag, onSuccessModify}) => {
   const [requestFetching, setRequestFetching] = useState(false)
   const {
     handleSubmit,
     register,
     setValue,
     reset,
+    control,
     formState: {errors},
-  } = useForm<StoryCreate>({resolver: yupResolver(StoryValidationSchema), defaultValues: {...story}})
+  } = useForm<HashtagCreate>({resolver: yupResolver(HashtagValidationSchema), defaultValues: {...hashtag}})
 
   useEffect(() => {
-    if (isOpen && story) {
-      reset({...story})
+    if (isOpen && hashtag) {
+      reset({...hashtag})
+    } else {
+      reset({name: "", name_ru: "", name_kz: "", is_visible: false})
     }
-  }, [isOpen, story])
+  }, [isOpen, hashtag])
 
-  const submitForm = (data: StoryCreate) => {
+  const submitForm = (data: HashtagCreate) => {
     setRequestFetching(true)
     const formData = {
       ...data,
     }
-    let promiseToExecute = story
-      ? BackendService.updateStory({...formData, stories_id: story.stories_id})
-      : BackendService.createStory(formData)
+    let promiseToExecute = hashtag
+      ? BackendService.updateHashtag({...formData, hashtag_id: hashtag.hashtag_id})
+      : BackendService.createHashtag(formData)
 
     promiseToExecute
       .then((res) => {
@@ -63,33 +67,27 @@ const StoryAddUpdateModal: FC<Props> = ({isOpen, handleClose, story, onSuccessMo
   const onUploadIcon = async (event: FileUploadHandlerEvent) => {
     const file = event.files[0]
     const base64 = await convertFileIntoBase64(file)
-    const fileName = file.name
-    setValue("icon", {file: base64, filename: fileName})
+    setValue("image_base64", base64)
   }
 
   return (
-    <Modal isOpen={isOpen} handleClose={handleClose} title={`${story ? "Редактирование" : "Создание"} истории`}>
+    <Modal isOpen={isOpen} handleClose={handleClose} title={`${hashtag ? "Редактирование" : "Создание"} хештега`}>
       <form onSubmit={handleSubmit(submitForm)} style={{padding: "10px 0"}} className="flex flex-col gap-4">
-        <FormGroup label="Заголовок" helperText={errors.title?.message} invalid={!!errors.title}>
-          <TextField placeholder="Заголовок" {...register("title")} invalid={!!errors.title} />
+        <FormGroup label="Заголовок" helperText={errors.name?.message} invalid={!!errors.name}>
+          <TextField placeholder="Заголовок" {...register("name")} invalid={!!errors.name} />
         </FormGroup>
-        <FormGroup label="Время начала" helperText={errors.start_time?.message} invalid={!!errors.start_time}>
-          <TextField
-            type="datetime-local"
-            placeholder="Время начала"
-            {...register("start_time")}
-            invalid={!!errors.start_time}
-          />
+        <FormGroup label="Заголовок KZ" helperText={errors.name_kz?.message} invalid={!!errors.name_kz}>
+          <TextField placeholder="Заголовок KZ" {...register("name_kz")} invalid={!!errors.name_kz} />
         </FormGroup>
-        <FormGroup label="Время окончания" helperText={errors.end_time?.message} invalid={!!errors.end_time}>
-          <TextField
-            type="datetime-local"
-            placeholder="Время окончания"
-            {...register("end_time")}
-            invalid={!!errors.end_time}
-          />
+        <FormGroup label="Заголовок RU" helperText={errors.name_ru?.message} invalid={!!errors.name_ru}>
+          <TextField placeholder="Заголовок RU" {...register("name_ru")} invalid={!!errors.name_ru} />
         </FormGroup>
-        <FormGroup label="Иконка" helperText={errors.icon?.file?.message} invalid={!!errors.icon?.file}>
+
+        <FormGroup helperText={errors.is_visible?.message} invalid={!!errors.is_visible}>
+          <Checkbox control={control} name="is_visible" label="Активность" invalid={!!errors.is_visible} />
+        </FormGroup>
+
+        <FormGroup label="Иконка" helperText={errors.image_base64?.message} invalid={!!errors.image_base64}>
           <FileInput multiple={false} accept="image/*" uploadHandler={onUploadIcon} />
         </FormGroup>
         <div style={{display: "flex", justifyContent: "flex-end", gap: "8px", marginTop: "12px"}}>
@@ -101,4 +99,4 @@ const StoryAddUpdateModal: FC<Props> = ({isOpen, handleClose, story, onSuccessMo
   )
 }
 
-export default StoryAddUpdateModal
+export default HashTagAddUpdateModal

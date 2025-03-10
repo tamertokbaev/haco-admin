@@ -3,6 +3,10 @@
   color: #ecf0f1;
   padding: 16px;
   min-height: 54px;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 4;
 }
 
 .title {

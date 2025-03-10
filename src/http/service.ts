@@ -1,11 +1,11 @@
 import http from "./http"
 import {API_BASE_URL} from "../constants/constants"
 import {PromiseResponse} from "../interfaces/http"
-import {Product, Story, StoryCreate, StoryUpdate} from "../interfaces/interfaces"
+import {Hashtag, HashtagCreate, HashtagUpdate, Product, Story, StoryCreate, StoryUpdate} from "../interfaces/interfaces"
 
 export namespace BackendService {
   export const getPosts = () => {
-    return http.get(`${API_BASE_URL}`)
+    return http.get(`${API_BASE_URL}/api/v1/post`, {params: {language: "ru"}})
   }
 
   export const getProductsList = (): PromiseResponse<Array<Product>> => {
@@ -30,5 +30,21 @@ export namespace BackendService {
 
   export const deleteStory = (storiesId: number): PromiseResponse<unknown> => {
     return http.delete(`${API_BASE_URL}/api/v1/stories/id`, {params: {stories_id: storiesId}})
+  }
+
+  export const getHashtagsList = (): PromiseResponse<Array<Hashtag>> => {
+    return http.get(`${API_BASE_URL}/api/v1/hashtag`)
+  }
+
+  export const deleteHashtag = (hashtagId: number): PromiseResponse<unknown> => {
+    return http.delete(`${API_BASE_URL}/api/v1/hashtag`, {params: {hashtag_id: hashtagId}})
+  }
+
+  export const createHashtag = (data: HashtagCreate): PromiseResponse<unknown> => {
+    return http.post(`${API_BASE_URL}/api/v1/hashtag`, data)
+  }
+
+  export const updateHashtag = (data: HashtagUpdate): PromiseResponse<unknown> => {
+    return http.put(`${API_BASE_URL}/api/v1/hashtag`, data)
   }
 }

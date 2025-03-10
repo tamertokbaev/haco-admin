@@ -82,3 +82,70 @@ export interface Icon {
   file: string
   filename: string
 }
+
+export interface Hashtag {
+  hashtag_id: number
+  image_path: string
+  is_visible: boolean
+  name: string
+  name_kz: string
+  name_ru: string
+  posts: Post[]
+}
+
+export interface HashtagCreate {
+  image_base64: string
+  is_visible: boolean
+  name: string
+  name_kz: string
+  name_ru: string
+}
+
+export type HashtagUpdate = HashtagCreate & {
+  hashtag_id: number
+}
+
+export interface Post {
+  body: string
+  code: string
+  collections: Collection[]
+  company: string
+  created_at: string
+  description: string
+  hashtags: string[]
+  images: Image[]
+  language: string
+  point: number
+  post_id: number
+  post_order: number
+  quiz_time: number
+  rating_status: string
+  read_time: number
+  sapphire: number
+  short_description: string
+  status: string
+  title: string
+  uuid: string
+}
+
+export interface Collection {
+  collection_id: number
+  image_path: string
+  image_path_kz: string
+  image_path_ru: string
+  is_recommendation: boolean
+  name: string
+  name_kz: string
+  name_ru: string
+  posts: string[]
+}
+
+export interface Image {
+  created_at: string
+  file_name: string
+  image_id: number
+  post_id: number
+  product_id: number
+  type: string
+  url: string
+}

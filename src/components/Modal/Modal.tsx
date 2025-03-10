@@ -18,8 +18,9 @@ const Modal: FC<Props> = ({isOpen, handleClose, title, children, footerContent})
       breakpoints={{"960px": "75vw", "641px": "100vw"}}
       onHide={handleClose}
       footer={footerContent}
-      maximizable
       contentStyle={{paddingBottom: "10px"}}
+      blockScroll
+      dismissableMask
     >
       <div className="m-0">{children}</div>
     </Dialog>

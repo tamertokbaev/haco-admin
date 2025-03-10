@@ -1,14 +1,14 @@
-import React, { FC } from "react";
-import s from "./Layout.module.scss";
-import Sidebar from "../Sidebar/Sidebar";
-import AppBar from "../AppBar/AppBar";
+import React, {FC} from "react"
+import s from "./Layout.module.scss"
+import Sidebar from "../Sidebar/Sidebar"
+import AppBar from "../AppBar/AppBar"
 
 type Props = {
-  pageTitle: string;
-  children: React.ReactNode | React.ReactElement;
-};
+  pageTitle: string
+  children: React.ReactNode | React.ReactElement
+}
 
-const Layout: FC<Props> = ({ pageTitle, children }) => {
+const Layout: FC<Props> = ({pageTitle, children}) => {
   return (
     <div className={s.root}>
       <Sidebar />
@@ -17,7 +17,7 @@ const Layout: FC<Props> = ({ pageTitle, children }) => {
         <div className={s.content}>{children}</div>
       </main>
     </div>
-  );
-};
+  )
+}
 
-export default Layout;
+export default Layout
