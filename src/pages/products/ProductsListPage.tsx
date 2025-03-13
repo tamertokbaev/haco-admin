@@ -7,7 +7,7 @@ import {BackendService} from "../../http/service"
 import {Toast} from "../../utils/toast"
 import Layout from "../../components/Layout/Layout"
 import {AppRoutePageNames, AppRoutes} from "../../routes"
-import ProductAddUpdateModal from "../../views/products/ProductAddUpdateModal.tsx"
+import ProductAddUpdateModal from "../../views/products/ProductAddUpdateModal"
 
 const ProductsListPage = () => {
   const tableRef = useRef<TableRef>(null)
@@ -27,7 +27,7 @@ const ProductsListPage = () => {
     {
       heading: "",
       content: (item) => (
-        <Button size="small" onClick={() => setProductEditState({isOpen: true, story: item})}>
+        <Button size="small" onClick={() => setProductEditState({isOpen: true, product: item})}>
           Редактировать
         </Button>
       ),
@@ -76,11 +76,17 @@ const ProductsListPage = () => {
   return (
     <Layout pageTitle={AppRoutePageNames[AppRoutes.products]}>
       <ConfirmPopup />
+      <div style={{marginBottom: "1rem", display: "flex", justifyContent: "flex-end"}}>
+        <Button size="small" icon="pi pi-plus" onClick={() => setProductEditState({isOpen: true, product: null})}>
+          Добавить новую запись
+        </Button>
+      </div>
       <Table ref={tableRef} rows={rows} fetchUrl={BackendService.getProductsList} />
       <ProductAddUpdateModal
         isOpen={productEditState.isOpen}
         handleClose={closeModal}
         product={productEditState.product}
+        onSuccessModify={handleForceRefetch}
       />
     </Layout>
   )

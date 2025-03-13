@@ -1,4 +1,4 @@
-import {Hashtag, Post, PostsGet} from "../../interfaces/interfaces"
+import {Collection, Post, PostsGet} from "../../interfaces/interfaces"
 import React, {FC, useEffect, useState} from "react"
 import Modal from "../../components/Modal/Modal"
 import Table, {TableRow} from "../../components/Table/Table"
@@ -10,7 +10,7 @@ import {Toast} from "../../utils/toast"
 type Props = {
   isOpen: boolean
   handleClose: () => void
-  hashtag: Hashtag | null
+  collection: Collection | null
   onSuccessModify: () => void
 }
 
@@ -20,7 +20,7 @@ const PostCollectionType = {
   2: "partners",
 }
 
-const HashTagPostAttachModal: FC<Props> = ({isOpen, handleClose, hashtag, onSuccessModify}) => {
+const CollectionPostAttachModal: FC<Props> = ({isOpen, handleClose, collection, onSuccessModify}) => {
   const [postsCollection, setPostsCollection] = useState<PostsGet | null>(null)
   const [activeTab, setActiveTab] = useState<number>(0)
   const [selectedPosts, setSelectedPosts] = useState<Array<Post>>([])
@@ -54,36 +54,42 @@ const HashTagPostAttachModal: FC<Props> = ({isOpen, handleClose, hashtag, onSucc
 
   const onRemovePost = (post: Post) => {
     setSelectedPosts(selectedPosts.filter((selectedPost) => selectedPost.post_id !== post.post_id))
-    BackendService.deleteHashtagFromPost({post_id: post.post_id, hashtag_id: hashtag!.hashtag_id}).then((res) => {
-      if (res.data.status) {
-        onSuccessModify()
-        Toast.displaySuccessMessage("Пост успешно отвязан от хештега")
-      }
-    })
-    return true
-  }
-
-  const attachPost = async (post: Post | undefined) => {
-    if (!hashtag || !post) return
-    if (selectedPosts.find((selectedPost) => selectedPost.post_id === post.post_id)) {
-      BackendService.deleteHashtagFromPost({post_id: post.post_id, hashtag_id: hashtag?.hashtag_id}).then((res) => {
+    BackendService.deleteCollectionFromPost({post_id: post.post_id, collection_id: collection!.collection_id}).then(
+      (res) => {
         if (res.data.status) {
           onSuccessModify()
           Toast.displaySuccessMessage("Пост успешно отвязан от хештега")
         }
-      })
+      },
+    )
+    return true
+  }
+
+  const attachPost = async (post: Post | undefined) => {
+    if (!collection || !post) return
+    if (selectedPosts.find((selectedPost) => selectedPost.post_id === post.post_id)) {
+      BackendService.deleteCollectionFromPost({post_id: post.post_id, collection_id: collection?.collection_id}).then(
+        (res) => {
+          if (res.data.status) {
+            onSuccessModify()
+            Toast.displaySuccessMessage("Пост успешно отвязан от хештега")
+          }
+        },
+      )
     } else {
-      BackendService.attachHashtagToPost({post_id: post.post_id, hashtag_id: hashtag?.hashtag_id}).then((res) => {
-        if (res.data.status) {
-          onSuccessModify()
-          Toast.displaySuccessMessage("Пост успешно привязан к хештегу")
-        }
-      })
+      BackendService.attachCollectionToPost({post_id: post.post_id, collection_id: collection?.collection_id}).then(
+        (res) => {
+          if (res.data.status) {
+            onSuccessModify()
+            Toast.displaySuccessMessage("Пост успешно привязан к хештегу")
+          }
+        },
+      )
     }
   }
 
   return (
-    <Modal isOpen={isOpen} handleClose={handleClose} title={`Привязка постов к хештегу`}>
+    <Modal isOpen={isOpen} handleClose={handleClose} title={`Привязка постов к коллекции`}>
       <TabView activeIndex={activeTab} onTabChange={(e) => onTabsChange(e.index)}>
         <TabPanel header="Bestsellers"> </TabPanel>
         <TabPanel header="Continue reading"></TabPanel>
@@ -109,4 +115,4 @@ const HashTagPostAttachModal: FC<Props> = ({isOpen, handleClose, hashtag, onSucc
   )
 }
 
-export default HashTagPostAttachModal
+export default CollectionPostAttachModal

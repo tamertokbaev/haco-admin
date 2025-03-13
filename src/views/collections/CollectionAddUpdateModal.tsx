@@ -1,6 +1,6 @@
 import React, {FC, useEffect, useState} from "react"
 import Modal from "../../components/Modal/Modal"
-import {Hashtag, HashtagCreate} from "../../interfaces/interfaces"
+import {Collection, CollectionCreate} from "../../interfaces/interfaces"
 import {useForm} from "react-hook-form"
 import FormGroup from "../../components/FormGroup/FormGroup"
 import TextField from "../../components/TextField/TextField"
@@ -9,7 +9,7 @@ import FileInput from "../../components/FileInput/FileInput"
 import {FileUploadHandlerEvent} from "primereact/fileupload"
 import {convertFileIntoBase64} from "../../utils/file"
 import {yupResolver} from "@hookform/resolvers/yup"
-import {HashtagValidationSchema} from "../../validation/storyValidation"
+import {CollectionValidationSchema} from "../../validation/storyValidation"
 import {BackendService} from "../../http/service"
 import {Toast} from "../../utils/toast"
 import Checkbox from "../../components/Checkbox/Checkbox"
@@ -17,11 +17,11 @@ import Checkbox from "../../components/Checkbox/Checkbox"
 type Props = {
   isOpen: boolean
   handleClose: () => void
-  hashtag: Hashtag | null
+  collection: Collection | null
   onSuccessModify: () => void
 }
 
-const HashTagAddUpdateModal: FC<Props> = ({isOpen, handleClose, hashtag, onSuccessModify}) => {
+const HashTagAddUpdateModal: FC<Props> = ({isOpen, handleClose, collection, onSuccessModify}) => {
   const [requestFetching, setRequestFetching] = useState(false)
   const {
     handleSubmit,
@@ -30,48 +30,49 @@ const HashTagAddUpdateModal: FC<Props> = ({isOpen, handleClose, hashtag, onSucce
     reset,
     control,
     formState: {errors},
-  } = useForm<HashtagCreate>({resolver: yupResolver(HashtagValidationSchema), defaultValues: {...hashtag}})
+    // @ts-ignore
+  } = useForm<CollectionCreate>({resolver: yupResolver(CollectionValidationSchema), defaultValues: {...collection}})
 
   useEffect(() => {
-    if (isOpen && hashtag) {
-      reset({...hashtag})
+    if (isOpen && collection) {
+      reset({...collection})
     } else {
-      reset({name: "", name_ru: "", name_kz: "", is_visible: false})
+      reset({name: "", name_ru: "", name_kz: "", is_recommendation: false})
     }
-  }, [isOpen, hashtag])
+  }, [isOpen, collection])
 
-  const submitForm = (data: HashtagCreate) => {
+  const submitForm = (data: CollectionCreate) => {
     setRequestFetching(true)
     const formData = {
       ...data,
     }
-    let promiseToExecute = hashtag
-      ? BackendService.updateHashtag({...formData, hashtag_id: hashtag.hashtag_id})
-      : BackendService.createHashtag(formData)
+    let promiseToExecute = collection
+      ? BackendService.updateCollection({...formData, collection_id: collection.collection_id})
+      : BackendService.createCollection(formData)
 
     promiseToExecute
       .then((res) => {
         if (res.data.status) {
-          Toast.displaySuccessMessage(`Запись успешно ${hashtag ? "отредактирована" : "создана"}!`)
+          Toast.displaySuccessMessage(`Запись успешно ${collection ? "отредактирована" : "создана"}!`)
           onSuccessModify()
-        } else Toast.displayErrorMessage(`Произошла ошибка при ${hashtag ? "редактировании" : "создании"} записи!`)
+        } else Toast.displayErrorMessage(`Произошла ошибка при ${collection ? "редактировании" : "создании"} записи!`)
       })
       .catch(() => {
-        Toast.displayErrorMessage(`Произошла ошибка при ${hashtag ? "редактировании" : "создании"} записи!`)
+        Toast.displayErrorMessage(`Произошла ошибка при ${collection ? "редактировании" : "создании"} записи!`)
       })
       .finally(() => {
         setRequestFetching(false)
       })
   }
 
-  const onUploadIcon = async (event: FileUploadHandlerEvent) => {
+  const onUploadIcon = async (event: FileUploadHandlerEvent, type: "image" | "image_ru" | "image_kz") => {
     const file = event.files[0]
     const base64 = await convertFileIntoBase64(file)
-    setValue("image_base64", base64)
+    setValue(type, {file: base64, filename: file.name})
   }
 
   return (
-    <Modal isOpen={isOpen} handleClose={handleClose} title={`${hashtag ? "Редактирование" : "Создание"} хештега`}>
+    <Modal isOpen={isOpen} handleClose={handleClose} title={`${collection ? "Редактирование" : "Создание"} хештега`}>
       <form onSubmit={handleSubmit(submitForm)} style={{padding: "10px 0"}} className="flex flex-col gap-4">
         <FormGroup label="Заголовок" helperText={errors.name?.message} invalid={!!errors.name}>
           <TextField placeholder="Заголовок" {...register("name")} invalid={!!errors.name} />
@@ -83,12 +84,23 @@ const HashTagAddUpdateModal: FC<Props> = ({isOpen, handleClose, hashtag, onSucce
           <TextField placeholder="Заголовок RU" {...register("name_ru")} invalid={!!errors.name_ru} />
         </FormGroup>
 
-        <FormGroup helperText={errors.is_visible?.message} invalid={!!errors.is_visible}>
-          <Checkbox control={control} name="is_visible" label="Активность" invalid={!!errors.is_visible} />
+        <FormGroup helperText={errors.is_recommendation?.message} invalid={!!errors.is_recommendation}>
+          <Checkbox
+            control={control}
+            name="is_recommendation"
+            label="Рекомендации"
+            invalid={!!errors.is_recommendation}
+          />
         </FormGroup>
 
-        <FormGroup label="Иконка" helperText={errors.image_base64?.message} invalid={!!errors.image_base64}>
-          <FileInput multiple={false} accept="image/*" uploadHandler={onUploadIcon} />
+        <FormGroup label="Иконка" helperText={errors.image?.message} invalid={!!errors.image}>
+          <FileInput multiple={false} accept="image/*" uploadHandler={(e) => onUploadIcon(e, "image")} />
+        </FormGroup>
+        <FormGroup label="Иконка KZ" helperText={errors.image_kz?.message} invalid={!!errors.image_kz}>
+          <FileInput multiple={false} accept="image/*" uploadHandler={(e) => onUploadIcon(e, "image_kz")} />
+        </FormGroup>
+        <FormGroup label="Иконка RU" helperText={errors.image_ru?.message} invalid={!!errors.image_ru}>
+          <FileInput multiple={false} accept="image/*" uploadHandler={(e) => onUploadIcon(e, "image_ru")} />
         </FormGroup>
         <div style={{display: "flex", justifyContent: "flex-end", gap: "8px", marginTop: "12px"}}>
           <Button label="Отменить" type="button" onClick={handleClose} autoFocus className="p-button-text" />

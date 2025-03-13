@@ -1,58 +1,57 @@
 import React, {FC, useEffect, useState} from "react"
 import Modal from "../../components/Modal/Modal"
-import {Story, StoryCreate} from "../../interfaces/interfaces"
+import {Contest, ContestCreate} from "../../interfaces/interfaces"
 import {useForm} from "react-hook-form"
 import FormGroup from "../../components/FormGroup/FormGroup"
 import TextField from "../../components/TextField/TextField"
 import {Button} from "primereact/button"
-import FileInput from "../../components/FileInput/FileInput"
-import {FileUploadHandlerEvent} from "primereact/fileupload"
-import {convertFileIntoBase64} from "../../utils/file"
 import {yupResolver} from "@hookform/resolvers/yup"
-import {StoryValidationSchema} from "../../validation/storyValidation"
+import {ContestValidationSchema} from "../../validation/storyValidation"
 import {BackendService} from "../../http/service"
 import {Toast} from "../../utils/toast"
 import {formatDateLocal} from "../../utils/date"
+import Checkbox from "../../components/Checkbox/Checkbox"
 
 type Props = {
   isOpen: boolean
   handleClose: () => void
-  story: Story | null
+  contest: Contest | null
   onSuccessModify: () => void
 }
 
-const StoryAddUpdateModal: FC<Props> = ({isOpen, handleClose, story, onSuccessModify}) => {
+const ContestAddUpdateModal: FC<Props> = ({isOpen, handleClose, contest, onSuccessModify}) => {
   const [requestFetching, setRequestFetching] = useState(false)
   const {
     handleSubmit,
     register,
+    control,
     setValue,
     reset,
     formState: {errors},
     // @ts-ignore
-  } = useForm<StoryCreate>({resolver: yupResolver(StoryValidationSchema), defaultValues: {...story}})
+  } = useForm<ContestCreate>({resolver: yupResolver(ContestValidationSchema), defaultValues: {...contest}})
 
   useEffect(() => {
-    if (isOpen && story) {
+    if (isOpen && contest) {
       reset({
-        title: story.title,
-        start_time: formatDateLocal(story.start_time),
-        end_time: formatDateLocal(story.end_time),
-        icon: {file: story.icon_path, filename: story.icon_path},
+        consolation_prize_sapphire: contest.consolation_prize_sapphire,
+        start_time: formatDateLocal(contest.start_time),
+        end_time: formatDateLocal(contest.end_time),
+        is_active: contest.is_active,
       })
     }
-  }, [isOpen, story])
+  }, [isOpen, contest])
 
-  const submitForm = (data: StoryCreate) => {
+  const submitForm = (data: ContestCreate) => {
     setRequestFetching(true)
     const formData = {
       ...data,
       start_time: new Date(data.start_time).toISOString(),
       end_time: new Date(data.end_time).toISOString(),
     }
-    let promiseToExecute = story
-      ? BackendService.updateStory({...formData, stories_id: story.stories_id})
-      : BackendService.createStory(formData)
+    let promiseToExecute = contest
+      ? BackendService.updateContest({...formData, contest_id: contest.contest_id})
+      : BackendService.createContest(formData)
 
     promiseToExecute
       .then((res) => {
@@ -69,18 +68,19 @@ const StoryAddUpdateModal: FC<Props> = ({isOpen, handleClose, story, onSuccessMo
       })
   }
 
-  const onUploadIcon = async (event: FileUploadHandlerEvent) => {
-    const file = event.files[0]
-    const base64 = await convertFileIntoBase64(file)
-    const fileName = file.name
-    setValue("icon", {file: base64, filename: fileName})
-  }
-
   return (
-    <Modal isOpen={isOpen} handleClose={handleClose} title={`${story ? "Редактирование" : "Создание"} истории`}>
+    <Modal isOpen={isOpen} handleClose={handleClose} title={`${contest ? "Редактирование" : "Создание"} контеста`}>
       <form onSubmit={handleSubmit(submitForm)} style={{padding: "10px 0"}} className="flex flex-col gap-4">
-        <FormGroup label="Заголовок" helperText={errors.title?.message} invalid={!!errors.title}>
-          <TextField placeholder="Заголовок" {...register("title")} invalid={!!errors.title} />
+        <FormGroup
+          label="Сапфиры"
+          helperText={errors.consolation_prize_sapphire?.message}
+          invalid={!!errors.consolation_prize_sapphire}
+        >
+          <TextField
+            placeholder="Сапфиры"
+            {...register("consolation_prize_sapphire")}
+            invalid={!!errors.consolation_prize_sapphire}
+          />
         </FormGroup>
         <FormGroup label="Время начала" helperText={errors.start_time?.message} invalid={!!errors.start_time}>
           <TextField
@@ -98,8 +98,8 @@ const StoryAddUpdateModal: FC<Props> = ({isOpen, handleClose, story, onSuccessMo
             invalid={!!errors.end_time}
           />
         </FormGroup>
-        <FormGroup label="Иконка" helperText={errors.icon?.file?.message} invalid={!!errors.icon?.file}>
-          <FileInput multiple={false} accept="image/*" uploadHandler={onUploadIcon} />
+        <FormGroup helperText={errors.is_active?.message} invalid={!!errors.is_active}>
+          <Checkbox control={control} name="is_active" label="Активный" invalid={!!errors.is_active} />
         </FormGroup>
         <div style={{display: "flex", justifyContent: "flex-end", gap: "8px", marginTop: "12px"}}>
           <Button label="Отменить" type="button" onClick={handleClose} autoFocus className="p-button-text" />
@@ -110,4 +110,4 @@ const StoryAddUpdateModal: FC<Props> = ({isOpen, handleClose, story, onSuccessMo
   )
 }
 
-export default StoryAddUpdateModal
+export default ContestAddUpdateModal

@@ -2,41 +2,44 @@ import {useRef, useState} from "react"
 import {Button} from "primereact/button"
 import {confirmPopup, ConfirmPopup} from "primereact/confirmpopup"
 import Table, {TableRef, TableRow} from "../../components/Table/Table"
-import {Hashtag} from "../../interfaces/interfaces"
+import {Collection} from "../../interfaces/interfaces"
 import {BackendService} from "../../http/service"
 import {Toast} from "../../utils/toast"
 import Layout from "../../components/Layout/Layout"
 import {AppRoutePageNames, AppRoutes} from "../../routes"
-import HashTagAddUpdateModal from "../../views/hashtags/HashtagAddUpdateModal"
-import HashTagPostAttachModal from "../../views/hashtags/HashtagPostAttachModal"
+import CollectionPostAttachModal from "../../views/collections/CollectionPostAttachModal"
+import CollectionAddUpdateModal from "../../views/collections/CollectionAddUpdateModal"
 
-const HastagsListPage = () => {
+const CollectionsListPage = () => {
   const tableRef = useRef<TableRef>(null)
-  const [hashtagEditState, setHashtagEditState] = useState<{isOpen: boolean; hashtag: Hashtag | null}>({
+  const [collectionEditState, setCollectionEditState] = useState<{isOpen: boolean; collection: Collection | null}>({
     isOpen: false,
-    hashtag: null,
+    collection: null,
   })
-  const [hashtagPostAttachState, setHashtagPostAttachState] = useState<{isOpen: boolean; hashtag: Hashtag | null}>({
+  const [collectionPostAttachState, setCollectionPostAttachState] = useState<{
+    isOpen: boolean
+    collection: Collection | null
+  }>({
     isOpen: false,
-    hashtag: null,
+    collection: null,
   })
 
   const closeModal = () => {
-    setHashtagEditState((prevState) => ({...prevState, isOpen: false}))
+    setCollectionEditState((prevState) => ({...prevState, isOpen: false}))
   }
 
   const closeHashtagPostAttachModal = () => {
-    setHashtagPostAttachState((prevState) => ({...prevState, isOpen: false}))
+    setCollectionPostAttachState((prevState) => ({...prevState, isOpen: false}))
   }
 
-  const rows: Array<TableRow<Hashtag>> = [
-    {heading: "ID", content: (item) => item.hashtag_id},
+  const rows: Array<TableRow<Collection>> = [
+    {heading: "ID", content: (item) => item.collection_id},
     {heading: "Название", content: (item) => item.name},
     {heading: "Посты", content: (item) => item.posts?.map((item) => item.title).join(", ") || "-"},
     {
       heading: "",
       content: (item) => (
-        <Button size="small" onClick={() => setHashtagEditState({isOpen: true, hashtag: item})}>
+        <Button size="small" onClick={() => setCollectionEditState({isOpen: true, collection: item})}>
           Редактировать
         </Button>
       ),
@@ -44,7 +47,11 @@ const HastagsListPage = () => {
     {
       heading: "",
       content: (item) => (
-        <Button size="small" severity="info" onClick={() => setHashtagPostAttachState({isOpen: true, hashtag: item})}>
+        <Button
+          size="small"
+          severity="info"
+          onClick={() => setCollectionPostAttachState({isOpen: true, collection: item})}
+        >
           Привязать посты
         </Button>
       ),
@@ -73,8 +80,8 @@ const HastagsListPage = () => {
     })
   }
 
-  const deleteItem = (product: Hashtag) => {
-    BackendService.deleteHashtag(product.hashtag_id)
+  const deleteItem = (collection: Collection) => {
+    BackendService.deleteCollection(collection.collection_id)
       .then((res) => {
         if (res.data.status) {
           Toast.displaySuccessMessage("Запись успешно удалена!")
@@ -96,28 +103,28 @@ const HastagsListPage = () => {
   }
 
   return (
-    <Layout pageTitle={AppRoutePageNames[AppRoutes.hashtags]}>
+    <Layout pageTitle={AppRoutePageNames[AppRoutes.collections]}>
       <ConfirmPopup />
       <div style={{marginBottom: "1rem", display: "flex", justifyContent: "flex-end"}}>
-        <Button size="small" icon="pi pi-plus" onClick={() => setHashtagEditState({isOpen: true, hashtag: null})}>
+        <Button size="small" icon="pi pi-plus" onClick={() => setCollectionEditState({isOpen: true, collection: null})}>
           Добавить новую запись
         </Button>
       </div>
-      <Table ref={tableRef} rows={rows} fetchUrl={BackendService.getHashtagsList} />
-      <HashTagAddUpdateModal
-        isOpen={hashtagEditState.isOpen}
+      <Table ref={tableRef} rows={rows} fetchUrl={BackendService.getCollectionsList} />
+      <CollectionAddUpdateModal
+        isOpen={collectionEditState.isOpen}
         handleClose={closeModal}
-        hashtag={hashtagEditState.hashtag}
+        collection={collectionEditState.collection}
         onSuccessModify={onSuccessModify}
       />
-      <HashTagPostAttachModal
-        isOpen={hashtagPostAttachState.isOpen}
+      <CollectionPostAttachModal
+        isOpen={collectionPostAttachState.isOpen}
         handleClose={closeHashtagPostAttachModal}
-        hashtag={hashtagPostAttachState.hashtag}
-        onSuccessModify={() => {}}
+        collection={collectionPostAttachState.collection}
+        onSuccessModify={onSuccessModify}
       />
     </Layout>
   )
 }
 
-export default HastagsListPage
+export default CollectionsListPage
