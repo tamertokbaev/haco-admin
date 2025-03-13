@@ -21,6 +21,7 @@ const Modal: FC<Props> = ({isOpen, handleClose, title, children, footerContent})
       contentStyle={{paddingBottom: "10px"}}
       blockScroll
       dismissableMask
+      maximizable
     >
       <div className="m-0">{children}</div>
     </Dialog>

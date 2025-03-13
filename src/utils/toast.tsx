@@ -1,4 +1,4 @@
-import { Slide, toast } from "react-toastify";
+import {Slide, toast} from "react-toastify"
 
 const toastConfig = {
   hideProgressBar: true,
@@ -9,17 +9,17 @@ const toastConfig = {
   transition: Slide,
   closeButton: true,
   autoClose: 3000,
-};
+}
 
 const displaySuccessMessage = (title: string) => {
-  toast.success(title, { ...toastConfig });
-};
+  toast.success(title, {...toastConfig})
+}
 
 const displayErrorMessage = (title: string) => {
-  toast.error(title, { ...toastConfig });
-};
+  toast.error(title, {...toastConfig})
+}
 
 export const Toast = {
   displaySuccessMessage,
   displayErrorMessage,
-};
+}
