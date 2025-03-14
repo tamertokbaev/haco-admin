@@ -6,7 +6,7 @@ import {
   CollectionAttach,
   CollectionCreate,
   CollectionUpdate,
-  Contest,
+  Contest, ContestBookCreate, ContestBookUpdate,
   ContestCreate,
   ContestPrizeCreate,
   ContestPrizeUpdate,
@@ -156,5 +156,17 @@ export namespace BackendService {
 
   export const deleteContestPrize = (contestPrizeId: number): PromiseResponse<unknown> => {
     return http.delete(`${API_BASE_URL}/api/v1/contest/prize`, {params: {contest_prize_id: contestPrizeId}})
+  }
+
+  export const createContestBook = (data: ContestBookCreate): PromiseResponse<unknown> => {
+    return http.post(`${API_BASE_URL}/api/v1/contest/book`, data)
+  }
+
+  export const updateContestBook = (data: ContestBookUpdate): PromiseResponse<unknown> => {
+    return http.put(`${API_BASE_URL}/api/v1/contest/book`, data)
+  }
+
+  export const deleteContestBook = (contestBookId: number): PromiseResponse<unknown> => {
+    return http.delete(`${API_BASE_URL}/api/v1/contest/books`, {params: {contest_book_id: contestBookId}})
   }
 }

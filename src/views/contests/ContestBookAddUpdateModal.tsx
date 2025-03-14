@@ -21,7 +21,7 @@ type Props = {
   onSuccessModify: () => void
 }
 
-const ContestPrizeAddUpdateModal: FC<Props> = ({isOpen, handleClose, contestPrize, contestId, onSuccessModify}) => {
+const ContestBookAddUpdateModal: FC<Props> = ({isOpen, handleClose, contestPrize, contestId, onSuccessModify}) => {
   const [requestFetching, setRequestFetching] = useState(false)
   const {
     handleSubmit,
@@ -100,4 +100,4 @@ const ContestPrizeAddUpdateModal: FC<Props> = ({isOpen, handleClose, contestPriz
   )
 }
 
-export default ContestPrizeAddUpdateModal
+export default ContestBookAddUpdateModal

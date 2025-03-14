@@ -305,6 +305,32 @@ export interface ContestBook {
   updated_at: string
 }
 
+export type ContestBookCreate = {
+  body: string
+  body_en: string
+  body_kz: string
+  contest_coins: number
+  contest_id: number
+  count_of_questions: number
+  day_number: number
+  description: string
+  description_en: string
+  description_kz: string
+  image: {
+    file: string
+    filename: string
+  }
+  point: number
+  status: string
+  title: string
+  title_en: string
+  title_kz: string
+}
+
+export type ContestBookUpdate = ContestBookCreate & {
+  contest_book_id: number
+}
+
 export interface ContestHistory {
   contest_book_id: number
   contest_history_id: number

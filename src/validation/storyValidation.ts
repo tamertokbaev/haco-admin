@@ -84,3 +84,9 @@ export const ContestPrizeValidationSchema = yup.object().shape({
   prize_name: yup.string().required(fieldIsRequiredString),
   image: IconValidation,
 })
+
+export const ContestBookValidationSchema = yup.object().shape({
+  number: yup.number().required(fieldIsRequiredString),
+  prize_name: yup.string().required(fieldIsRequiredString),
+  image: IconValidation,
+})
