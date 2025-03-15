@@ -1,51 +1,51 @@
 import React, {FC, useEffect, useRef, useState} from "react"
 import Modal from "../../components/Modal/Modal"
 import Table, {TableRef, TableRow} from "../../components/Table/Table"
-import {ContestPrizeUpdate} from "../../interfaces/interfaces"
+import {ContestBookUpdate} from "../../interfaces/interfaces"
 import {Button} from "primereact/button"
 import {confirmPopup} from "primereact/confirmpopup"
 import {BackendService} from "../../http/service"
 import {Toast} from "../../utils/toast"
-import ContestPrizeAddUpdateModal from "./ContestPrizeAddUpdateModal"
+import ContestBookAddUpdateModal from "./ContestBookAddUpdateModal"
 
 type Props = {
   isOpen: boolean
   handleClose: () => void
-  contestPrizes: Array<ContestPrizeUpdate>
+  contestBooks: Array<ContestBookUpdate>
   contestId: number
 }
 
-const ContestPrizesModal: FC<Props> = ({isOpen, handleClose, contestPrizes, contestId}) => {
+const ContestBooksModal: FC<Props> = ({isOpen, handleClose, contestBooks, contestId}) => {
   const tableRef = useRef<TableRef>(null)
-  const [prizes, setPrizes] = useState(contestPrizes)
-  const [contestPrizeEditState, setContestPrizeEditState] = useState<{
+  const [books, setBooks] = useState(contestBooks)
+  const [contestBookEditState, setContestBookEditState] = useState<{
     isOpen: boolean
-    contestPrize: ContestPrizeUpdate | null
+    contestBook: ContestBookUpdate | null
   }>({
     isOpen: false,
-    contestPrize: null,
+    contestBook: null,
   })
 
   useEffect(() => {
     if (!isOpen) {
-      setContestPrizeEditState({isOpen: false, contestPrize: null})
+      setContestBookEditState({isOpen: false, contestBook: null})
     }
   }, [isOpen])
 
   useEffect(() => {
-    setPrizes(contestPrizes)
-  }, [contestPrizes])
+    setBooks(contestBooks)
+  }, [contestBooks])
 
   const closeModal = () => {
-    setContestPrizeEditState((prevState) => ({...prevState, isOpen: false}))
+    setContestBookEditState((prevState) => ({...prevState, isOpen: false}))
   }
 
-  const rows: Array<TableRow<ContestPrizeUpdate>> = [
-    {heading: "Название приза", content: (item) => item.prize_name},
+  const rows: Array<TableRow<ContestBookUpdate>> = [
+    {heading: "Название приза", content: (item) => item.title},
     {
       heading: "",
       content: (item) => (
-        <Button size="small" onClick={() => setContestPrizeEditState({isOpen: true, contestPrize: item})}>
+        <Button size="small" onClick={() => setContestBookEditState({isOpen: true, contestBook: item})}>
           Редактировать
         </Button>
       ),
@@ -74,17 +74,17 @@ const ContestPrizesModal: FC<Props> = ({isOpen, handleClose, contestPrizes, cont
     })
   }
 
-  const deleteItem = (contest: ContestPrizeUpdate) => {
-    BackendService.deleteContestPrize(contest.contest_prize_id)
+  const deleteItem = (contest: ContestBookUpdate) => {
+    BackendService.deleteContestBook(contest.contest_book_id)
       .then((res) => {
         if (res.data.status) {
           Toast.displaySuccessMessage("Запись успешно удалена!")
-          const prizesCopy = [...prizes]
-          const removeIndex = prizesCopy.findIndex((prize) => prize.contest_prize_id === contest.contest_prize_id)
+          const prizesCopy = [...books]
+          const removeIndex = prizesCopy.findIndex((prize) => prize.contest_book_id === contest.contest_book_id)
           if (removeIndex > -1) {
             prizesCopy.splice(removeIndex, 1)
           }
-          setPrizes(prizesCopy)
+          setBooks(prizesCopy)
         } else Toast.displayErrorMessage(res.data.message)
       })
       .catch(() => {
@@ -93,22 +93,22 @@ const ContestPrizesModal: FC<Props> = ({isOpen, handleClose, contestPrizes, cont
   }
 
   return (
-    <Modal isOpen={isOpen} handleClose={handleClose} title="Призы контеста">
+    <Modal isOpen={isOpen} handleClose={handleClose} title="Записи (book) контеста">
       <div>
         <div style={{marginBottom: "1rem", display: "flex", justifyContent: "flex-end"}}>
           <Button
             size="small"
             icon="pi pi-plus"
-            onClick={() => setContestPrizeEditState({isOpen: true, contestPrize: null})}
+            onClick={() => setContestBookEditState({isOpen: true, contestBook: null})}
           >
             Добавить новую запись
           </Button>
         </div>
-        <Table rows={rows} customData={prizes} ref={tableRef} />
-        <ContestPrizeAddUpdateModal
-          isOpen={contestPrizeEditState.isOpen}
+        <Table rows={rows} customData={books} ref={tableRef} />
+        <ContestBookAddUpdateModal
+          isOpen={contestBookEditState.isOpen}
           handleClose={closeModal}
-          contestPrize={contestPrizeEditState.contestPrize}
+          contestBook={contestBookEditState.contestBook}
           contestId={contestId}
           onSuccessModify={handleClose}
         />
@@ -117,4 +117,4 @@ const ContestPrizesModal: FC<Props> = ({isOpen, handleClose, contestPrizes, cont
   )
 }
 
-export default ContestPrizesModal
+export default ContestBooksModal

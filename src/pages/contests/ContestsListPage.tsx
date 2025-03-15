@@ -9,6 +9,7 @@ import Layout from "../../components/Layout/Layout"
 import {AppRoutePageNames, AppRoutes} from "../../routes"
 import ContestAddUpdateModal from "../../views/contests/ContestAddUpdateModal"
 import ContestPrizesModal from "../../views/contests/ContestPrizesModal"
+import ContestBooksModal from "../../views/contests/ContestBooksModal"
 
 const ContestsListPage = () => {
   const tableRef = useRef<TableRef>(null)
@@ -140,6 +141,13 @@ const ContestsListPage = () => {
         isOpen={contestPrizesEditState.isOpen}
         handleClose={closeContestPrizesEditModal}
         contestPrizes={contestPrizesEditState.contest?.contest_prizes || []}
+        contestId={contestPrizesEditState.contest?.contest_id ?? 0}
+      />
+      <ContestBooksModal
+        isOpen={contestBooksEditState.isOpen}
+        handleClose={closeContestBooksEditModal}
+        // @ts-ignore
+        contestBooks={contestPrizesEditState.contest?.contest_books || []}
         contestId={contestPrizesEditState.contest?.contest_id ?? 0}
       />
     </Layout>

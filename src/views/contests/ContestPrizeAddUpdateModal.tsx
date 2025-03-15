@@ -82,7 +82,11 @@ const ContestPrizeAddUpdateModal: FC<Props> = ({isOpen, handleClose, contestPriz
   }
 
   return (
-    <Modal isOpen={isOpen} handleClose={handleClose} title={`${contestPrize ? "Редактирование" : "Создание"} контеста`}>
+    <Modal
+      isOpen={isOpen}
+      handleClose={handleClose}
+      title={`${contestPrize ? "Редактирование" : "Создание"} приза контеста`}
+    >
       <form onSubmit={handleSubmit(submitForm)} style={{padding: "10px 0"}} className="flex flex-col gap-4">
         <FormGroup label="Название приза" helperText={errors.prize_name?.message} invalid={!!errors.prize_name}>
           <TextField placeholder="Название приза" {...register("prize_name")} invalid={!!errors.prize_name} />

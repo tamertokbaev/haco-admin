@@ -320,7 +320,7 @@ export type ContestBookCreate = {
   image: {
     file: string
     filename: string
-  }
+  } | null
   point: number
   status: string
   title: string

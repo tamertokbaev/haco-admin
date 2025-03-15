@@ -89,7 +89,19 @@ export const ContestPrizeValidationSchema = yup.object().shape({
 })
 
 export const ContestBookValidationSchema = yup.object().shape({
-  number: yup.number().required(fieldIsRequiredString),
-  prize_name: yup.string().required(fieldIsRequiredString),
+  body: yup.string().required(fieldIsRequiredString),
+  body_en: yup.string(),
+  body_kz: yup.string(),
+  contest_coins: yup.number(),
+  count_of_questions: yup.number(),
+  day_number: yup.number(),
+  description: yup.string(),
+  description_en: yup.string(),
+  description_kz: yup.string(),
   image: IconValidation,
+  point: yup.number(),
+  status: yup.string(),
+  title: yup.string(),
+  title_en: yup.string(),
+  title_kz: yup.string(),
 })
