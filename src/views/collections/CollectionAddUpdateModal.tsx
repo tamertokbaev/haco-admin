@@ -13,6 +13,7 @@ import {CollectionValidationSchema} from "../../validation/storyValidation"
 import {BackendService} from "../../http/service"
 import {Toast} from "../../utils/toast"
 import Checkbox from "../../components/Checkbox/Checkbox"
+import {getImagePath} from "../../utils/image"
 
 type Props = {
   isOpen: boolean
@@ -94,13 +95,28 @@ const HashTagAddUpdateModal: FC<Props> = ({isOpen, handleClose, collection, onSu
         </FormGroup>
 
         <FormGroup label="Иконка" helperText={errors.image?.message} invalid={!!errors.image}>
-          <FileInput multiple={false} accept="image/*" uploadHandler={(e) => onUploadIcon(e, "image")} />
+          <FileInput
+            multiple={false}
+            accept="image/*"
+            uploadHandler={(e) => onUploadIcon(e, "image")}
+            uploadedImage={getImagePath(collection?.image_path)}
+          />
         </FormGroup>
         <FormGroup label="Иконка KZ" helperText={errors.image_kz?.message} invalid={!!errors.image_kz}>
-          <FileInput multiple={false} accept="image/*" uploadHandler={(e) => onUploadIcon(e, "image_kz")} />
+          <FileInput
+            multiple={false}
+            accept="image/*"
+            uploadHandler={(e) => onUploadIcon(e, "image_kz")}
+            uploadedImage={getImagePath(collection?.image_path_kz)}
+          />
         </FormGroup>
         <FormGroup label="Иконка RU" helperText={errors.image_ru?.message} invalid={!!errors.image_ru}>
-          <FileInput multiple={false} accept="image/*" uploadHandler={(e) => onUploadIcon(e, "image_ru")} />
+          <FileInput
+            multiple={false}
+            accept="image/*"
+            uploadHandler={(e) => onUploadIcon(e, "image_ru")}
+            uploadedImage={getImagePath(collection?.image_path_ru)}
+          />
         </FormGroup>
         <div style={{display: "flex", justifyContent: "flex-end", gap: "8px", marginTop: "12px"}}>
           <Button label="Отменить" type="button" onClick={handleClose} autoFocus className="p-button-text" />

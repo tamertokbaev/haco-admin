@@ -13,6 +13,7 @@ import {HashtagValidationSchema} from "../../validation/storyValidation"
 import {BackendService} from "../../http/service"
 import {Toast} from "../../utils/toast"
 import Checkbox from "../../components/Checkbox/Checkbox"
+import {getImagePath} from "../../utils/image"
 
 type Props = {
   isOpen: boolean
@@ -88,7 +89,12 @@ const HashTagAddUpdateModal: FC<Props> = ({isOpen, handleClose, hashtag, onSucce
         </FormGroup>
 
         <FormGroup label="Иконка" helperText={errors.image_base64?.message} invalid={!!errors.image_base64}>
-          <FileInput multiple={false} accept="image/*" uploadHandler={onUploadIcon} />
+          <FileInput
+            multiple={false}
+            accept="image/*"
+            uploadHandler={onUploadIcon}
+            uploadedImage={getImagePath(hashtag?.image_path)}
+          />
         </FormGroup>
         <div style={{display: "flex", justifyContent: "flex-end", gap: "8px", marginTop: "12px"}}>
           <Button label="Отменить" type="button" onClick={handleClose} autoFocus className="p-button-text" />

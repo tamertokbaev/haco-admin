@@ -13,6 +13,7 @@ import {StoryValidationSchema} from "../../validation/storyValidation"
 import {BackendService} from "../../http/service"
 import {Toast} from "../../utils/toast"
 import {formatDateLocal} from "../../utils/date"
+import {getImagePath} from "../../utils/image"
 
 type Props = {
   isOpen: boolean
@@ -99,7 +100,12 @@ const StoryAddUpdateModal: FC<Props> = ({isOpen, handleClose, story, onSuccessMo
           />
         </FormGroup>
         <FormGroup label="Иконка" helperText={errors.icon?.file?.message} invalid={!!errors.icon?.file}>
-          <FileInput multiple={false} accept="image/*" uploadHandler={onUploadIcon} />
+          <FileInput
+            multiple={false}
+            accept="image/*"
+            uploadHandler={onUploadIcon}
+            uploadedImage={getImagePath(story?.icon_path)}
+          />
         </FormGroup>
         <div style={{display: "flex", justifyContent: "flex-end", gap: "8px", marginTop: "12px"}}>
           <Button label="Отменить" type="button" onClick={handleClose} autoFocus className="p-button-text" />

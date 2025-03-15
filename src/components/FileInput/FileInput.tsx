@@ -1,12 +1,20 @@
-import React, {FC, useRef, useState} from "react"
+import React, {FC, useEffect, useRef, useState} from "react"
 import {FileUpload, FileUploadProps} from "primereact/fileupload"
 import {Button} from "primereact/button"
 
-type Props = FileUploadProps
+type Props = FileUploadProps & {
+  uploadedImage?: string
+}
 
-const FileInput: FC<Props> = ({...props}) => {
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null)
+const FileInput: FC<Props> = ({uploadedImage, ...props}) => {
+  const [previewUrl, setPreviewUrl] = useState<string | null>(uploadedImage || null)
   const fileUploadRef = useRef<any>(null)
+
+  useEffect(() => {
+    if (uploadedImage) {
+      setPreviewUrl(uploadedImage)
+    }
+  }, [uploadedImage])
 
   const handleSelect = (e: any) => {
     if (e.files && e.files.length > 0) {

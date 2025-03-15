@@ -121,6 +121,7 @@ const TableComponent = <T extends object>(
       stripedRows
       scrollable
       selection={selectedItems}
+      selectAll={false}
       onSelectionChange={handleSelectionChange}
       paginator={fetchUrlPaginated !== undefined}
       selectionMode={hasSelection ? "checkbox" : null}

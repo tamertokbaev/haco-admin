@@ -270,6 +270,7 @@ export interface ContestPrizeCreate {
 
 export type ContestPrizeUpdate = ContestPrizeCreate & {
   contest_prize_id: number
+  photo_path?: string
 }
 
 export interface ContestCreate {
@@ -321,6 +322,7 @@ export type ContestBookCreate = {
     file: string
     filename: string
   } | null
+  photo_path?: string | undefined
   point: number
   status: string
   title: string

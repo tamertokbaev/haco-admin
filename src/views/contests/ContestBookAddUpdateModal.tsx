@@ -12,6 +12,7 @@ import {Toast} from "../../utils/toast"
 import FileInput from "../../components/FileInput/FileInput"
 import {FileUploadHandlerEvent} from "primereact/fileupload"
 import {convertFileIntoBase64} from "../../utils/file"
+import {getImagePath} from "../../utils/image"
 
 type Props = {
   isOpen: boolean
@@ -136,7 +137,12 @@ const ContestBookAddUpdateModal: FC<Props> = ({isOpen, handleClose, contestBook,
           <TextField placeholder="День" {...register("day_number")} invalid={!!errors.day_number} />
         </FormGroup>
         <FormGroup label="Иконка" helperText={errors.image?.message} invalid={!!errors.image}>
-          <FileInput multiple={false} accept="image/*" uploadHandler={(e) => onUploadIcon(e)} />
+          <FileInput
+            multiple={false}
+            accept="image/*"
+            uploadHandler={(e) => onUploadIcon(e)}
+            uploadedImage={getImagePath(contestBook?.photo_path)}
+          />
         </FormGroup>
         <FormGroup label="Очки" helperText={errors.point?.message} invalid={!!errors.point}>
           <TextField placeholder="Очки" {...register("point")} invalid={!!errors.point} />

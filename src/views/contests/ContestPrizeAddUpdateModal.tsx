@@ -12,6 +12,7 @@ import {Toast} from "../../utils/toast"
 import FileInput from "../../components/FileInput/FileInput"
 import {FileUploadHandlerEvent} from "primereact/fileupload"
 import {convertFileIntoBase64} from "../../utils/file"
+import {getImagePath} from "../../utils/image"
 
 type Props = {
   isOpen: boolean
@@ -95,7 +96,12 @@ const ContestPrizeAddUpdateModal: FC<Props> = ({isOpen, handleClose, contestPriz
           <TextField placeholder="Количество" {...register("number")} invalid={!!errors.number} />
         </FormGroup>
         <FormGroup label="Иконка" helperText={errors.image?.message} invalid={!!errors.image}>
-          <FileInput multiple={false} accept="image/*" uploadHandler={(e) => onUploadIcon(e)} />
+          <FileInput
+            multiple={false}
+            accept="image/*"
+            uploadHandler={(e) => onUploadIcon(e)}
+            uploadedImage={getImagePath(contestPrize?.photo_path)}
+          />
         </FormGroup>
         <div style={{display: "flex", justifyContent: "flex-end", gap: "8px", marginTop: "12px"}}>
           <Button label="Отменить" type="button" onClick={handleClose} autoFocus className="p-button-text" />
