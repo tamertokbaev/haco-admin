@@ -23,6 +23,13 @@ const ContestsListPage = () => {
     isOpen: false,
     contest: null,
   })
+  const [contestBooksEditState, setContestBooksEditState] = useState<{
+    isOpen: boolean
+    contest: Contest | null
+  }>({
+    isOpen: false,
+    contest: null,
+  })
 
   const closeModal = () => {
     setContestEditState((prevState) => ({...prevState, isOpen: false}))
@@ -30,6 +37,11 @@ const ContestsListPage = () => {
 
   const closeContestPrizesEditModal = () => {
     setContestPrizesEditState((prevState) => ({...prevState, isOpen: false}))
+    handleForceRefetch()
+  }
+
+  const closeContestBooksEditModal = () => {
+    setContestBooksEditState((prevState) => ({...prevState, isOpen: false}))
     handleForceRefetch()
   }
 
@@ -52,6 +64,14 @@ const ContestsListPage = () => {
       content: (item) => (
         <Button size="small" onClick={() => setContestPrizesEditState({isOpen: true, contest: item})}>
           Редактировать призы
+        </Button>
+      ),
+    },
+    {
+      heading: "",
+      content: (item) => (
+        <Button size="small" onClick={() => setContestBooksEditState({isOpen: true, contest: item})}>
+          Редактировать записи
         </Button>
       ),
     },

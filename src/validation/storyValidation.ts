@@ -2,10 +2,13 @@ import * as yup from "yup"
 
 const fieldIsRequiredString = "Данное поле обязательно для заполнения"
 
-export const IconValidation = yup.object().shape({
-  file: yup.string(),
-  filename: yup.string(),
-})
+export const IconValidation = yup
+  .object()
+  .shape({
+    file: yup.string(),
+    filename: yup.string(),
+  })
+  .nullable()
 
 export const StoryValidationSchema = yup.object().shape({
   end_time: yup.string().required(fieldIsRequiredString),
