@@ -251,6 +251,7 @@ export interface Contest {
   code: string
   consolation_prize_sapphire: number
   contest_books: ContestBook[]
+  contest_prizes: ContestPrizeUpdate[]
   contest_id: number
   contest_participants: ContestParticipant[]
   created_at: string

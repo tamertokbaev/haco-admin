@@ -1,4 +1,4 @@
-import {useRef, useState} from "react"
+import React, {useRef, useState} from "react"
 import {Button} from "primereact/button"
 import {confirmPopup, ConfirmPopup} from "primereact/confirmpopup"
 import Table, {TableRef, TableRow} from "../../components/Table/Table"
@@ -8,14 +8,15 @@ import {Toast} from "../../utils/toast"
 import Layout from "../../components/Layout/Layout"
 import {AppRoutePageNames, AppRoutes} from "../../routes"
 import ContestAddUpdateModal from "../../views/contests/ContestAddUpdateModal"
+import ContestPrizesModal from "../../views/contests/ContestPrizesModal"
 
 const ContestsListPage = () => {
   const tableRef = useRef<TableRef>(null)
-  const [collectionEditState, setCollectionEditState] = useState<{isOpen: boolean; contest: Contest | null}>({
+  const [contestEditState, setContestEditState] = useState<{isOpen: boolean; contest: Contest | null}>({
     isOpen: false,
     contest: null,
   })
-  const [collectionPostAttachState, setCollectionPostAttachState] = useState<{
+  const [contestPrizesEditState, setContestPrizesEditState] = useState<{
     isOpen: boolean
     contest: Contest | null
   }>({
@@ -24,11 +25,12 @@ const ContestsListPage = () => {
   })
 
   const closeModal = () => {
-    setCollectionEditState((prevState) => ({...prevState, isOpen: false}))
+    setContestEditState((prevState) => ({...prevState, isOpen: false}))
   }
 
-  const closeHashtagPostAttachModal = () => {
-    setCollectionPostAttachState((prevState) => ({...prevState, isOpen: false}))
+  const closeContestPrizesEditModal = () => {
+    setContestPrizesEditState((prevState) => ({...prevState, isOpen: false}))
+    handleForceRefetch()
   }
 
   const rows: Array<TableRow<Contest>> = [
@@ -40,7 +42,7 @@ const ContestsListPage = () => {
     {
       heading: "",
       content: (item) => (
-        <Button size="small" onClick={() => setCollectionEditState({isOpen: true, contest: item})}>
+        <Button size="small" onClick={() => setContestEditState({isOpen: true, contest: item})}>
           Редактировать
         </Button>
       ),
@@ -48,12 +50,8 @@ const ContestsListPage = () => {
     {
       heading: "",
       content: (item) => (
-        <Button
-          size="small"
-          severity="info"
-          onClick={() => setCollectionPostAttachState({isOpen: true, contest: item})}
-        >
-          Привязать посты
+        <Button size="small" onClick={() => setContestPrizesEditState({isOpen: true, contest: item})}>
+          Редактировать призы
         </Button>
       ),
     },
@@ -107,23 +105,23 @@ const ContestsListPage = () => {
     <Layout pageTitle={AppRoutePageNames[AppRoutes.contests]}>
       <ConfirmPopup />
       <div style={{marginBottom: "1rem", display: "flex", justifyContent: "flex-end"}}>
-        <Button size="small" icon="pi pi-plus" onClick={() => setCollectionEditState({isOpen: true, contest: null})}>
+        <Button size="small" icon="pi pi-plus" onClick={() => setContestEditState({isOpen: true, contest: null})}>
           Добавить новую запись
         </Button>
       </div>
       <Table ref={tableRef} rows={rows} fetchUrl={BackendService.getContestList} />
       <ContestAddUpdateModal
-        isOpen={collectionEditState.isOpen}
+        isOpen={contestEditState.isOpen}
         handleClose={closeModal}
-        contest={collectionEditState.contest}
+        contest={contestEditState.contest}
         onSuccessModify={onSuccessModify}
       />
-      {/*<CollectionPostAttachModal*/}
-      {/*  isOpen={collectionPostAttachState.isOpen}*/}
-      {/*  handleClose={closeHashtagPostAttachModal}*/}
-      {/*  collection={collectionPostAttachState.contest}*/}
-      {/*  onSuccessModify={onSuccessModify}*/}
-      {/*/>*/}
+      <ContestPrizesModal
+        isOpen={contestPrizesEditState.isOpen}
+        handleClose={closeContestPrizesEditModal}
+        contestPrizes={contestPrizesEditState.contest?.contest_prizes || []}
+        contestId={contestPrizesEditState.contest?.contest_id ?? 0}
+      />
     </Layout>
   )
 }

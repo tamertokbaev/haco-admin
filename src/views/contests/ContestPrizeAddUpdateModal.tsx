@@ -42,6 +42,8 @@ const ContestPrizeAddUpdateModal: FC<Props> = ({isOpen, handleClose, contestPriz
         prize_name: contestPrize.prize_name,
         image: null,
       })
+    } else {
+      reset({number: 0, prize_name: ""})
     }
   }, [isOpen, contestPrize])
 
