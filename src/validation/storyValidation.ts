@@ -17,6 +17,13 @@ export const StoryValidationSchema = yup.object().shape({
   icon: IconValidation,
 })
 
+export const StoryPageValidationSchema = yup.object().shape({
+  text: yup.string().required(fieldIsRequiredString),
+  page_order: yup.number().required(fieldIsRequiredString),
+  is_readed: yup.boolean().required(fieldIsRequiredString),
+  image: IconValidation,
+})
+
 export const HashtagValidationSchema = yup.object().shape({
   image_base64: yup.string().required(fieldIsRequiredString),
   name: yup.string().required(fieldIsRequiredString),

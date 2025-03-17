@@ -99,6 +99,24 @@ export interface StoryPage {
   uuid: string
 }
 
+export type StoryPageCreate = {
+  created_at: string
+  image: {
+    file: string
+    filename: string
+  } | null
+  is_readed: boolean
+  page_order: number
+  stories_id: number
+  story_page_id: number
+  text: string
+  uuid: string
+}
+
+export type StoryPageUpdate = StoryPageCreate & {
+  story_page_id: number
+}
+
 export interface StoryCreate {
   end_time: string
   icon: Icon

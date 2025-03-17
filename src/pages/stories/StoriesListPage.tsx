@@ -8,6 +8,7 @@ import {Toast} from "../../utils/toast"
 import Layout from "../../components/Layout/Layout"
 import {AppRoutePageNames, AppRoutes} from "../../routes"
 import StoriesAddUpdateModal from "../../views/stories/StoriesAddUpdateModal"
+import StoryPagesEditModal from "../../views/stories/StoryPagesEditModal"
 
 const StoriesListPage = () => {
   const tableRef = useRef<TableRef>(null)
@@ -15,9 +16,17 @@ const StoriesListPage = () => {
     isOpen: false,
     story: null,
   })
+  const [storyPagesEditState, setStoryPagesEditState] = useState<{isOpen: boolean; story: Story | null}>({
+    isOpen: false,
+    story: null,
+  })
 
   const closeModal = () => {
     setStoryEditState((prevState) => ({...prevState, isOpen: false}))
+  }
+
+  const closeStoryPageModal = () => {
+    setStoryPagesEditState((prevState) => ({...prevState, isOpen: false}))
   }
 
   const rows: Array<TableRow<Story>> = [
@@ -28,6 +37,14 @@ const StoriesListPage = () => {
       content: (item) => (
         <Button size="small" onClick={() => setStoryEditState({isOpen: true, story: item})}>
           Редактировать
+        </Button>
+      ),
+    },
+    {
+      heading: "",
+      content: (item) => (
+        <Button size="small" onClick={() => setStoryPagesEditState({isOpen: true, story: item})}>
+          Редактировать страницы истории
         </Button>
       ),
     },
@@ -91,6 +108,11 @@ const StoriesListPage = () => {
         handleClose={closeModal}
         story={storyEditState.story}
         onSuccessModify={onSuccessModify}
+      />
+      <StoryPagesEditModal
+        isOpen={storyPagesEditState.isOpen}
+        handleClose={closeStoryPageModal}
+        story={storyPagesEditState.story}
       />
     </Layout>
   )

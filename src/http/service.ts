@@ -6,7 +6,9 @@ import {
   CollectionAttach,
   CollectionCreate,
   CollectionUpdate,
-  Contest, ContestBookCreate, ContestBookUpdate,
+  Contest,
+  ContestBookCreate,
+  ContestBookUpdate,
   ContestCreate,
   ContestPrizeCreate,
   ContestPrizeUpdate,
@@ -24,6 +26,8 @@ import {
   ProductUpdate,
   Story,
   StoryCreate,
+  StoryPageCreate,
+  StoryPageUpdate,
   StoryUpdate,
 } from "../interfaces/interfaces"
 
@@ -80,6 +84,22 @@ export namespace BackendService {
 
   export const deleteStory = (storiesId: number): PromiseResponse<unknown> => {
     return http.delete(`${API_BASE_URL}/api/v1/stories/id`, {params: {stories_id: storiesId}})
+  }
+
+  export const getStory = (storyId: number): PromiseResponse<Story> => {
+    return http.get(`${API_BASE_URL}/api/v1/stories/id`, {params: {stories_id: storyId}})
+  }
+
+  export const createStoryPage = (storyPage: StoryPageCreate): PromiseResponse<unknown> => {
+    return http.post(`${API_BASE_URL}/api/v1/story-page`, storyPage)
+  }
+
+  export const updateStoryPage = (storyPage: StoryPageUpdate): PromiseResponse<unknown> => {
+    return http.put(`${API_BASE_URL}/api/v1/story-page`, storyPage)
+  }
+
+  export const deleteStoryPage = (storyPageId: number): PromiseResponse<unknown> => {
+    return http.delete(`${API_BASE_URL}/api/v1/story-page`, {params: {story_page_id: storyPageId}})
   }
 
   export const getHashtagsList = (): PromiseResponse<Array<Hashtag>> => {
