@@ -83,7 +83,7 @@ export namespace BackendService {
   }
 
   export const deleteStory = (storiesId: number): PromiseResponse<unknown> => {
-    return http.delete(`${API_BASE_URL}/api/v1/stories/id`, {params: {stories_id: storiesId}})
+    return http.delete(`${API_BASE_URL}/api/v1/stories`, {params: {stories_id: storiesId}})
   }
 
   export const getStory = (storyId: number): PromiseResponse<Story> => {

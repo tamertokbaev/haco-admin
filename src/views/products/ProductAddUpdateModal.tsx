@@ -12,6 +12,7 @@ import {yupResolver} from "@hookform/resolvers/yup"
 import {ProductValidationSchema} from "../../validation/storyValidation"
 import {BackendService} from "../../http/service"
 import {Toast} from "../../utils/toast"
+import Select from "../../components/Select/Select"
 
 type Props = {
   isOpen: boolean
@@ -86,7 +87,13 @@ const ProductAddUpdateModal: FC<Props> = ({isOpen, handleClose, product, onSucce
           <TextField placeholder="SKU" {...register("sku")} invalid={!!errors.sku} />
         </FormGroup>
         <FormGroup label="Тип продажи" helperText={errors.sell_type?.message} invalid={!!errors.sell_type}>
-          <TextField placeholder="Тип продажи" {...register("sell_type")} invalid={!!errors.sell_type} />
+          <Select
+            placeholder="Тип продажи"
+            invalid={!!errors.sell_type}
+            options={["standard", "auction"]}
+            control={control}
+            name={{...register("sell_type")}.name}
+          />
         </FormGroup>
         <FormGroup label="Сапфиры" helperText={errors.sapphire?.message} invalid={!!errors.sapphire}>
           <TextField placeholder="Сапфиры" {...register("sapphire")} invalid={!!errors.sapphire} />
@@ -95,7 +102,24 @@ const ProductAddUpdateModal: FC<Props> = ({isOpen, handleClose, product, onSucce
           <TextField placeholder="Кол-во очков" {...register("point")} invalid={!!errors.point} />
         </FormGroup>
         <FormGroup label="Тип продукта" helperText={errors.product_type?.message} invalid={!!errors.product_type}>
-          <TextField placeholder="Тип продукта" {...register("product_type")} invalid={!!errors.product_type} />
+          <Select
+            control={control}
+            placeholder="Тип продукта"
+            {...register("product_type")}
+            options={["virtual", "physic"]}
+            invalid={!!errors.product_type}
+            name={{...register("product_type")}.name}
+          />
+        </FormGroup>
+        <FormGroup label="Статус" helperText={errors.status?.message} invalid={!!errors.status}>
+          <Select
+            control={control}
+            placeholder="Статус"
+            {...register("status")}
+            options={["Publish", "Draft"]}
+            invalid={!!errors.status}
+            name={{...register("status")}.name}
+          />
         </FormGroup>
         <FormGroup label="Предложение" helperText={errors.offer?.message} invalid={!!errors.offer}>
           <TextField placeholder="Предложение" {...register("offer")} invalid={!!errors.offer} />

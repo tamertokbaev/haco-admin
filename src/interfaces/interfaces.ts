@@ -54,6 +54,7 @@ export type ProductCreate = {
   title: string
   title_en: string
   title_kz: string
+  status: string
 }
 
 export type ProductUpdate = ProductCreate & {
