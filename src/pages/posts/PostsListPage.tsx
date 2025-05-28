@@ -31,6 +31,7 @@ const PostsListPage = () => {
         </Button>
       ),
     },
+    {heading: "Статус", content: (item) => item.status},
     {
       heading: "",
       content: (item) => (

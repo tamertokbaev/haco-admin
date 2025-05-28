@@ -9,4 +9,4 @@ export const LOCALE = {
 }
 
 export const API_BASE_URL = "http://157.90.227.125:8000"
-export const IMAGE_BASE_URL = "https://saiaxziyawkpdwqgvqah.supabase.co/storage/v1/object/public/"
+export const IMAGE_BASE_URL = "https://saiaxziyawkpdwqgvqah.supabase.co/storage/v1/object/public"
