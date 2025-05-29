@@ -37,7 +37,7 @@ export namespace BackendService {
   }
 
   export const getPostsV2 = (size: number = 10, page: number = 1): PromiseTableResponse<Array<Post>> => {
-    return http.get(`${API_BASE_URL}/api/v2/post/filter`, {
+    return http.get(`${API_BASE_URL}/api/v2/post/all`, {
       params: {language: "ru", size, page, post_type: "all"},
     })
   }

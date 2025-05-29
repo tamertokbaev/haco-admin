@@ -12,6 +12,7 @@ import {PostValidationSchema} from "../../validation/storyValidation"
 import {BackendService} from "../../http/service"
 import {Toast} from "../../utils/toast"
 import FileInput from "../../components/FileInput/FileInput"
+import {getImagePath} from "../../utils/image"
 
 type Props = {
   isOpen: boolean
@@ -112,9 +113,23 @@ const PostAddUpdateModal: FC<Props> = ({isOpen, handleClose, post, onSuccessModi
           <TextField placeholder="Статус рейтинга" {...register("rating_status")} invalid={!!errors.rating_status} />
         </FormGroup>
         <FormGroup label="Логотип" helperText={errors.logo?.message} invalid={!!errors.logo}>
+          {post?.images?.[0]?.url && (
+            <img
+              src={getImagePath(post.images[0].url)}
+              alt="Логотип"
+              style={{ width: "100px", height: "auto", marginBottom: "8px", borderRadius: "4px" }}
+            />
+          )}
           <FileInput multiple={false} accept="image/*" uploadHandler={(e) => onUploadIcon(e, "logo")} />
         </FormGroup>
-        <FormGroup label="Изображение" helperText={errors.logo?.message} invalid={!!errors.logo}>
+        <FormGroup label="Изображение" helperText={errors.image?.message} invalid={!!errors.image}>
+          {post?.images?.[1]?.url && (
+            <img
+              src={getImagePath(post.images[1].url)}
+              alt="Логотип"
+              style={{ width: "100px", height: "auto", marginBottom: "8px", borderRadius: "4px" }}
+            />
+          )}
           <FileInput multiple={false} accept="image/*" uploadHandler={(e) => onUploadIcon(e, "image")} />
         </FormGroup>
         <div style={{display: "flex", justifyContent: "flex-end", gap: "8px", marginTop: "12px"}}>
