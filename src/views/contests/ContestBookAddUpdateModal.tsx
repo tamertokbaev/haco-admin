@@ -10,9 +10,8 @@ import {ContestBookValidationSchema} from "../../validation/storyValidation"
 import {BackendService} from "../../http/service"
 import {Toast} from "../../utils/toast"
 import FileInput from "../../components/FileInput/FileInput"
-import {FileUploadHandlerEvent} from "primereact/fileupload"
+import {FileUploadSelectEvent} from "primereact/fileupload"
 import {convertFileIntoBase64} from "../../utils/file"
-import {getImagePath} from "../../utils/image"
 
 type Props = {
   isOpen: boolean
@@ -93,7 +92,7 @@ const ContestBookAddUpdateModal: FC<Props> = ({isOpen, handleClose, contestBook,
       })
   }
 
-  const onUploadIcon = async (event: FileUploadHandlerEvent) => {
+  const onUploadIcon = async (event: FileUploadSelectEvent) => {
     const file = event.files[0]
     const base64 = await convertFileIntoBase64(file)
     setValue("image", {file: base64, filename: file.name})
@@ -137,12 +136,7 @@ const ContestBookAddUpdateModal: FC<Props> = ({isOpen, handleClose, contestBook,
           <TextField placeholder="День" {...register("day_number")} invalid={!!errors.day_number} />
         </FormGroup>
         <FormGroup label="Иконка" helperText={errors.image?.message} invalid={!!errors.image}>
-          <FileInput
-            multiple={false}
-            accept="image/*"
-            uploadHandler={(e) => onUploadIcon(e)}
-            uploadedImage={getImagePath(contestBook?.photo_path)}
-          />
+          <FileInput multiple={false} accept="image/*" onSelect={(e) => onUploadIcon(e)} />
         </FormGroup>
         <FormGroup label="Очки" helperText={errors.point?.message} invalid={!!errors.point}>
           <TextField placeholder="Очки" {...register("point")} invalid={!!errors.point} />

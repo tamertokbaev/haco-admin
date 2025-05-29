@@ -6,7 +6,7 @@ import FormGroup from "../../components/FormGroup/FormGroup"
 import TextField from "../../components/TextField/TextField"
 import {Button} from "primereact/button"
 import FileInput from "../../components/FileInput/FileInput"
-import {FileUploadHandlerEvent} from "primereact/fileupload"
+import {FileUploadSelectEvent} from "primereact/fileupload"
 import {convertFileIntoBase64} from "../../utils/file"
 import {yupResolver} from "@hookform/resolvers/yup"
 import {CollectionValidationSchema} from "../../validation/storyValidation"
@@ -66,7 +66,7 @@ const HashTagAddUpdateModal: FC<Props> = ({isOpen, handleClose, collection, onSu
       })
   }
 
-  const onUploadIcon = async (event: FileUploadHandlerEvent, type: "image" | "image_ru" | "image_kz") => {
+  const onUploadIcon = async (event: FileUploadSelectEvent, type: "image" | "image_ru" | "image_kz") => {
     const file = event.files[0]
     const base64 = await convertFileIntoBase64(file)
     setValue(type, {file: base64, filename: file.name})
@@ -98,7 +98,7 @@ const HashTagAddUpdateModal: FC<Props> = ({isOpen, handleClose, collection, onSu
           <FileInput
             multiple={false}
             accept="image/*"
-            uploadHandler={(e) => onUploadIcon(e, "image")}
+            onSelect={(e) => onUploadIcon(e, "image")}
             uploadedImage={getImagePath(collection?.image_path)}
           />
         </FormGroup>
@@ -106,7 +106,7 @@ const HashTagAddUpdateModal: FC<Props> = ({isOpen, handleClose, collection, onSu
           <FileInput
             multiple={false}
             accept="image/*"
-            uploadHandler={(e) => onUploadIcon(e, "image_kz")}
+            onSelect={(e) => onUploadIcon(e, "image_kz")}
             uploadedImage={getImagePath(collection?.image_path_kz)}
           />
         </FormGroup>
@@ -114,7 +114,7 @@ const HashTagAddUpdateModal: FC<Props> = ({isOpen, handleClose, collection, onSu
           <FileInput
             multiple={false}
             accept="image/*"
-            uploadHandler={(e) => onUploadIcon(e, "image_ru")}
+            onSelect={(e) => onUploadIcon(e, "image_ru")}
             uploadedImage={getImagePath(collection?.image_path_ru)}
           />
         </FormGroup>

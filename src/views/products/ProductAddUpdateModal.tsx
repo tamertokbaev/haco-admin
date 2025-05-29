@@ -6,7 +6,7 @@ import FormGroup from "../../components/FormGroup/FormGroup"
 import TextField from "../../components/TextField/TextField"
 import {Button} from "primereact/button"
 import FileInput from "../../components/FileInput/FileInput"
-import {FileUploadHandlerEvent} from "primereact/fileupload"
+import {FileUploadSelectEvent} from "primereact/fileupload"
 import {convertFileIntoBase64} from "../../utils/file"
 import {yupResolver} from "@hookform/resolvers/yup"
 import {ProductValidationSchema} from "../../validation/storyValidation"
@@ -65,7 +65,7 @@ const ProductAddUpdateModal: FC<Props> = ({isOpen, handleClose, product, onSucce
       })
   }
 
-  const onUploadIcon = async (event: FileUploadHandlerEvent) => {
+  const onUploadIcon = async (event: FileUploadSelectEvent) => {
     const file = event.files[0]
     const base64 = await convertFileIntoBase64(file)
     setValue("logo", {file: base64, filename: file.name})
@@ -131,7 +131,7 @@ const ProductAddUpdateModal: FC<Props> = ({isOpen, handleClose, product, onSucce
           <TextField placeholder="Предложение EN" {...register("offer_en")} invalid={!!errors.offer_en} />
         </FormGroup>
         <FormGroup label="Иконка" helperText={errors.logo?.message} invalid={!!errors.logo}>
-          <FileInput multiple={false} accept="image/*" uploadHandler={(e) => onUploadIcon(e)} />
+          <FileInput multiple={false} accept="image/*" onSelect={(e) => onUploadIcon(e)} />
         </FormGroup>
         <FormGroup label="Спец предложение" helperText={errors.discount?.message} invalid={!!errors.discount}>
           <TextField placeholder="Спец предложение" {...register("discount")} invalid={!!errors.discount} />

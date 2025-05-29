@@ -6,7 +6,7 @@ import FormGroup from "../../components/FormGroup/FormGroup"
 import TextField from "../../components/TextField/TextField"
 import {Button} from "primereact/button"
 import FileInput from "../../components/FileInput/FileInput"
-import {FileUploadHandlerEvent} from "primereact/fileupload"
+import {FileUploadSelectEvent} from "primereact/fileupload"
 import {convertFileIntoBase64} from "../../utils/file"
 import {yupResolver} from "@hookform/resolvers/yup"
 import {HashtagValidationSchema} from "../../validation/storyValidation"
@@ -65,7 +65,7 @@ const HashTagAddUpdateModal: FC<Props> = ({isOpen, handleClose, hashtag, onSucce
       })
   }
 
-  const onUploadIcon = async (event: FileUploadHandlerEvent) => {
+  const onUploadIcon = async (event: FileUploadSelectEvent) => {
     const file = event.files[0]
     const base64 = await convertFileIntoBase64(file)
     setValue("image_base64", base64)
@@ -92,7 +92,7 @@ const HashTagAddUpdateModal: FC<Props> = ({isOpen, handleClose, hashtag, onSucce
           <FileInput
             multiple={false}
             accept="image/*"
-            uploadHandler={onUploadIcon}
+            onSelect={onUploadIcon}
             uploadedImage={getImagePath(hashtag?.image_path)}
           />
         </FormGroup>

@@ -5,7 +5,7 @@ import {useForm} from "react-hook-form"
 import FormGroup from "../../components/FormGroup/FormGroup"
 import TextField from "../../components/TextField/TextField"
 import {Button} from "primereact/button"
-import {FileUploadHandlerEvent} from "primereact/fileupload"
+import {FileUploadSelectEvent} from "primereact/fileupload"
 import {convertFileIntoBase64} from "../../utils/file"
 import {yupResolver} from "@hookform/resolvers/yup"
 import {PostValidationSchema} from "../../validation/storyValidation"
@@ -65,7 +65,7 @@ const PostAddUpdateModal: FC<Props> = ({isOpen, handleClose, post, onSuccessModi
       })
   }
 
-  const onUploadIcon = async (event: FileUploadHandlerEvent, type: "logo" | "image") => {
+  const onUploadIcon = async (event: FileUploadSelectEvent, type: "logo" | "image") => {
     const file = event.files[0]
     const base64 = await convertFileIntoBase64(file)
     setValue(type, {file: base64, filename: file.name})
@@ -117,20 +117,20 @@ const PostAddUpdateModal: FC<Props> = ({isOpen, handleClose, post, onSuccessModi
             <img
               src={getImagePath(post.images[0].url)}
               alt="Логотип"
-              style={{ width: "100px", height: "auto", marginBottom: "8px", borderRadius: "4px" }}
+              style={{width: "100px", height: "auto", marginBottom: "8px", borderRadius: "4px"}}
             />
           )}
-          <FileInput multiple={false} accept="image/*" uploadHandler={(e) => onUploadIcon(e, "logo")} />
+          <FileInput multiple={false} accept="image/*" onSelect={(e) => onUploadIcon(e, "logo")} />
         </FormGroup>
         <FormGroup label="Изображение" helperText={errors.image?.message} invalid={!!errors.image}>
           {post?.images?.[1]?.url && (
             <img
               src={getImagePath(post.images[1].url)}
               alt="Логотип"
-              style={{ width: "100px", height: "auto", marginBottom: "8px", borderRadius: "4px" }}
+              style={{width: "100px", height: "auto", marginBottom: "8px", borderRadius: "4px"}}
             />
           )}
-          <FileInput multiple={false} accept="image/*" uploadHandler={(e) => onUploadIcon(e, "image")} />
+          <FileInput multiple={false} accept="image/*" onSelect={(e) => onUploadIcon(e, "image")} />
         </FormGroup>
         <div style={{display: "flex", justifyContent: "flex-end", gap: "8px", marginTop: "12px"}}>
           <Button label="Отменить" type="button" onClick={handleClose} autoFocus className="p-button-text" />

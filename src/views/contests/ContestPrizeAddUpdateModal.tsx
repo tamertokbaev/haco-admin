@@ -10,7 +10,7 @@ import {ContestPrizeValidationSchema} from "../../validation/storyValidation"
 import {BackendService} from "../../http/service"
 import {Toast} from "../../utils/toast"
 import FileInput from "../../components/FileInput/FileInput"
-import {FileUploadHandlerEvent} from "primereact/fileupload"
+import {FileUploadSelectEvent} from "primereact/fileupload"
 import {convertFileIntoBase64} from "../../utils/file"
 import {getImagePath} from "../../utils/image"
 
@@ -76,7 +76,7 @@ const ContestPrizeAddUpdateModal: FC<Props> = ({isOpen, handleClose, contestPriz
       })
   }
 
-  const onUploadIcon = async (event: FileUploadHandlerEvent) => {
+  const onUploadIcon = async (event: FileUploadSelectEvent) => {
     const file = event.files[0]
     const base64 = await convertFileIntoBase64(file)
     setValue("image", {file: base64, filename: file.name})
@@ -99,7 +99,7 @@ const ContestPrizeAddUpdateModal: FC<Props> = ({isOpen, handleClose, contestPriz
           <FileInput
             multiple={false}
             accept="image/*"
-            uploadHandler={(e) => onUploadIcon(e)}
+            onSelect={(e) => onUploadIcon(e)}
             uploadedImage={getImagePath(contestPrize?.photo_path)}
           />
         </FormGroup>

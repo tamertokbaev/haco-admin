@@ -6,7 +6,7 @@ import FormGroup from "../../components/FormGroup/FormGroup"
 import TextField from "../../components/TextField/TextField"
 import {Button} from "primereact/button"
 import FileInput from "../../components/FileInput/FileInput"
-import {FileUploadHandlerEvent} from "primereact/fileupload"
+import {FileUploadSelectEvent} from "primereact/fileupload"
 import {convertFileIntoBase64} from "../../utils/file"
 import {yupResolver} from "@hookform/resolvers/yup"
 import {StoryPageValidationSchema} from "../../validation/storyValidation"
@@ -72,7 +72,7 @@ const StoryPageAddUpdateModal: FC<Props> = ({isOpen, handleClose, storyPage, onS
       })
   }
 
-  const onUploadIcon = async (event: FileUploadHandlerEvent) => {
+  const onUploadIcon = async (event: FileUploadSelectEvent) => {
     const file = event.files[0]
     const base64 = await convertFileIntoBase64(file)
     const fileName = file.name
@@ -96,7 +96,7 @@ const StoryPageAddUpdateModal: FC<Props> = ({isOpen, handleClose, storyPage, onS
           <FileInput
             multiple={false}
             accept="image/*"
-            uploadHandler={onUploadIcon}
+            onSelect={onUploadIcon}
             uploadedImage={getImagePath(storyPage?.image_path)}
           />
         </FormGroup>
